@@ -39,3 +39,36 @@ group by grouping sets (
    (t1    ),
    (    t2),
  --  
+
+   
+------------------------------
+--                          --
+--    Using three columns   --
+--                          --
+------------------------------
+   
+   
+create table rr (
+   v1  varchar(10),
+   v2  varchar(10),
+   v3  varchar(10),
+   val integer
+);
+
+insert into rr values ('A', 'p', 'w', 1);
+insert into rr values ('A', 'p', 'x', 3);
+insert into rr values ('B', 'p', 'w', 1);
+insert into rr values ('C', 'p', 'w', 1);
+
+
+
+select
+   v1,
+   v2,
+   v3,
+   sum(val)
+from
+   rr
+group by
+   v1, v2,
+   rollup(v3);   
