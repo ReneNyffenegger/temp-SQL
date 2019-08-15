@@ -1,0 +1,31 @@
+--
+-- https://stackoverflow.com/a/52163341/180275
+--
+
+CREATE TABLE #t 
+   (
+   ID INT IDENTITY(1,1) PRIMARY KEY,
+   val INT NULL
+   );
+
+--   INSERT 10 values: 3 NULL, 7 integers
+   INSERT INTO #t SELECT NULL;
+   INSERT INTO #t SELECT NULL;
+   INSERT INTO #t SELECT NULL;
+   INSERT INTO #t SELECT 5;
+   INSERT INTO #t SELECT 7;
+   INSERT INTO #t SELECT 8;
+   INSERT INTO #t SELECT 9;
+   INSERT INTO #t SELECT 9;
+   INSERT INTO #t SELECT 11;
+   INSERT INTO #t SELECT 12;
+
+SELECT *,
+    CASE 
+        WHEN val IS NULL THEN NULL 
+    ELSE NTILE(4) OVER (
+        --Split NULL and NOT NULL into 2 different groups
+        PARTITION BY CASE WHEN val IS NULL THEN 0 ELSE 1 END 
+        ORDER BY val) 
+    END AS Q
+FROM #t
